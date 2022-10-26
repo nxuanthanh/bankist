@@ -1,5 +1,7 @@
 'use strict';
 
+import { accounts } from './src/modules/data';
+
 ///////////////////////////////////////
 // Modal window
 
@@ -17,11 +19,12 @@ const tabsContainer = document.querySelector('.operations__tab-container');
 const tabsContent = document.querySelectorAll('.operations__content');
 
 const btnLogin = document.querySelector('.btn-login');
-const firstName = document.querySelector('.firstname');
-const lasttName = document.querySelector('.lastname');
-const email = document.querySelector('.email');
+const username = document.querySelector('.username');
+const password = document.querySelector('.password');
 
-const openModal = e => {
+let currentAccount;
+
+const openModal = (e) => {
   e.preventDefault();
 
   modal.classList.remove('hidden');
@@ -33,26 +36,22 @@ const closeModal = () => {
   overlay.classList.add('hidden');
 };
 
-const handleOnLogin = e => {
+const handleOnLogin = (e) => {
   e.preventDefault();
 
-  const nameValue = `${firstName.value} ${lasttName.value}`;
-  const emailValue = email.value;
+  currentAccount = accounts.find((acc) => acc.owner === username.value);
 
-  if (
-    nameValue === 'nguyen xuan thanh' &&
-    emailValue === 'n.xuanthanh@gmail.com'
-  ) {
-    document.location.href = '/account.html';
+  if (currentAccount?.pin === Number(password.value)) {
+    window.location.href = '/account.html';
   }
 };
 
-btnsOpenModal.forEach(btn => btn.addEventListener('click', openModal));
+btnsOpenModal.forEach((btn) => btn.addEventListener('click', openModal));
 
 btnCloseModal.addEventListener('click', closeModal);
 overlay.addEventListener('click', closeModal);
 
-document.addEventListener('keydown', e => {
+document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
     closeModal();
   }
@@ -87,7 +86,7 @@ btnScrollTo.addEventListener('click', function () {
 2. Determine what element originated the event 
 */
 
-document.querySelector('.nav__links').addEventListener('click', e => {
+document.querySelector('.nav__links').addEventListener('click', (e) => {
   e.preventDefault();
 
   // Matching strategy
@@ -102,12 +101,12 @@ document.querySelector('.nav__links').addEventListener('click', e => {
 ///////////////////////////////////////
 // Tabbed component
 
-tabsContainer.addEventListener('click', e => {
+tabsContainer.addEventListener('click', (e) => {
   const clicked = e.target.closest('.operations__tab');
 
   // Remove active classes
-  tabs.forEach(t => t.classList.remove('operations__tab--active'));
-  tabsContent.forEach(c => c.classList.remove('operations__content--active'));
+  tabs.forEach((t) => t.classList.remove('operations__tab--active'));
+  tabsContent.forEach((c) => c.classList.remove('operations__content--active'));
 
   // Activate tab
   clicked?.classList.add('operations__tab--active');
@@ -120,13 +119,13 @@ tabsContainer.addEventListener('click', e => {
 
 ///////////////////////////////////////
 // Menu fade animation
-const handleOnHover = e => {
+const handleOnHover = (e) => {
   if (e.target.classList.contains('nav__link')) {
     const link = e.target;
     const siblings = link.closest('.nav').querySelectorAll('.nav__link');
     const logo = link.closest('.nav').querySelector('img');
 
-    siblings.forEach(el => {
+    siblings.forEach((el) => {
       if (el !== link) el.style.opacity = this;
     });
     logo.style.opacity = this;
@@ -205,7 +204,7 @@ const imgObserver = new IntersectionObserver(loadImg, {
   rootMargin: '200px',
 });
 
-imgTargets.forEach(img => imgObserver.observe(img));
+imgTargets.forEach((img) => imgObserver.observe(img));
 
 ///////////////////////////////////////
 // Slider
@@ -231,17 +230,13 @@ const slider = function () {
   const activateDot = function (slide) {
     document
       .querySelectorAll('.dots__dot')
-      .forEach(dot => dot.classList.remove('dots__dot--active'));
+      .forEach((dot) => dot.classList.remove('dots__dot--active'));
 
-    document
-      .querySelector(`.dots__dot[data-slide="${slide}"]`)
-      .classList.add('dots__dot--active');
+    document.querySelector(`.dots__dot[data-slide="${slide}"]`).classList.add('dots__dot--active');
   };
 
   const goToSlide = function (slide) {
-    slides.forEach(
-      (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
-    );
+    slides.forEach((s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`));
   };
 
   // Next slide
@@ -278,12 +273,12 @@ const slider = function () {
   btnRight.addEventListener('click', nextSlide);
   btnLeft.addEventListener('click', prevSlide);
 
-  document.addEventListener('keydown', e => {
+  document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') prevSlide();
     e.key === 'ArrowRight' && nextSlide();
   });
 
-  dotContainer.addEventListener('click', e => {
+  dotContainer.addEventListener('click', (e) => {
     if (e.target.classList.contains('dots__dot')) {
       const { slide } = e.target.dataset;
       goToSlide(slide);
