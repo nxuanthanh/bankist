@@ -1,5 +1,6 @@
 'use strict';
-import { accounts } from './modules/data';
+
+import { accounts } from './modules/data.js';
 
 // Elements
 const labelWelcome = document.querySelector('.welcome');
@@ -13,14 +14,11 @@ const labelTimer = document.querySelector('.timer');
 const containerApp = document.querySelector('.app');
 const containerMovements = document.querySelector('.movements');
 
-const btnLogin = document.querySelector('.login__btn');
 const btnTransfer = document.querySelector('.form__btn--transfer');
 const btnLoan = document.querySelector('.form__btn--loan');
 const btnClose = document.querySelector('.form__btn--close');
 const btnSort = document.querySelector('.btn--sort');
 
-const inputLoginUsername = document.querySelector('.login__input--user');
-const inputLoginPin = document.querySelector('.login__input--pin');
 const inputTransferTo = document.querySelector('.form__input--to');
 const inputTransferAmount = document.querySelector('.form__input--amount');
 const inputLoanAmount = document.querySelector('.form__input--loan-amount');
@@ -30,14 +28,6 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
-
-const currencies = new Map([
-  ['USD', 'United States dollar'],
-  ['EUR', 'Euro'],
-  ['GBP', 'Pound sterling'],
-]);
-
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
 
@@ -148,6 +138,7 @@ const calcDisplaySummary = function (acc) {
 };
 
 (() => {
+  currentAccount = JSON.parse(localStorage.getItem('currentUser'));
   labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')[0]}`;
   containerApp.style.opacity = 1;
 
@@ -167,42 +158,6 @@ const calcDisplaySummary = function (acc) {
 
   updateUI(currentAccount);
 })();
-
-// btnLogin.addEventListener('click', (e) => {
-//   e.preventDefault();
-
-//   currentAccount = accounts.find((acc) => acc.username === inputLoginUsername.value);
-
-//   if (currentAccount?.pin === Number(inputLoginPin.value)) {
-//     labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')[0]}`;
-//     containerApp.style.opacity = 1;
-
-//     inputLoginUsername.value = inputLoginPin.value = '';
-//     inputLoginPin.blur();
-
-//     const now = new Date();
-//     const locale = navigator.language;
-//     const options = {
-//       minute: 'numeric',
-//       hour: 'numeric',
-//       // weekday: 'long',
-//       day: 'numeric',
-//       month: '2-digit',
-//       year: 'numeric',
-//     };
-//     labelDate.textContent = new Intl.DateTimeFormat(locale, options).format(now);
-//     // const year = now.getFullYear();
-//     // const month = `${now.getMonth() + 1}`.padStart(2, 0);
-//     // const date = `${now.getDate()}`.padStart(2, 0);
-//     // const hour = `${now.getHours()}`.padStart(2, 0);
-//     // const min = `${now.getMinutes()}`.padStart(2, 0);
-//     // labelDate.textContent = `${date}/${month} ${year}, ${hour} : ${min}`;
-//     if (timer) clearInterval(timer);
-//     timer = startLogOutTimer();
-
-//     updateUI(currentAccount);
-//   }
-// });
 
 let sorted = false;
 btnSort.addEventListener('click', (e) => {

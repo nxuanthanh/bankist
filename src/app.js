@@ -1,6 +1,6 @@
 'use strict';
 
-import { accounts } from './src/modules/data';
+import { accounts } from './modules/data.js';
 
 ///////////////////////////////////////
 // Modal window
@@ -22,8 +22,6 @@ const btnLogin = document.querySelector('.btn-login');
 const username = document.querySelector('.username');
 const password = document.querySelector('.password');
 
-let currentAccount;
-
 const openModal = (e) => {
   e.preventDefault();
 
@@ -39,10 +37,11 @@ const closeModal = () => {
 const handleOnLogin = (e) => {
   e.preventDefault();
 
-  currentAccount = accounts.find((acc) => acc.owner === username.value);
+  let currentAccount = accounts.find((acc) => acc.owner === username.value);
 
   if (currentAccount?.pin === Number(password.value)) {
     window.location.href = '/account.html';
+    localStorage.setItem('currentUser', JSON.stringify(currentAccount));
   }
 };
 
